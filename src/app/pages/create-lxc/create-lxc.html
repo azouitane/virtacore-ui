@@ -1,0 +1,124 @@
+<div class="form-container">
+  <header class="form-header">
+    <h1 class="form-header__title">Create New LXC Container</h1>
+    <p class="form-header__subtitle">Configure and deploy a new container instantly.</p>
+  </header>
+
+  @if (successMessage()) {
+    <div class="alert alert--success">
+      <span class="alert__icon">✔</span>
+      <p class="alert__text">{{ successMessage() }}</p>
+    </div>
+  }
+
+  <form [formGroup]="lxcForm" (ngSubmit)="AddVm()" class="cyber-form">
+    
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="form-label" for="hostname">Hostname</label>
+        <input 
+          id="hostname" 
+          type="text" 
+          formControlName="hostname" 
+          class="form-input" 
+          placeholder="e.g., ubuntu-web-01"
+          [class.form-input--error]="lxcForm.get('hostname')?.touched && lxcForm.get('hostname')?.invalid"
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="clusterId">Target Cluster</label>
+        <select 
+          id="clusterId" 
+          formControlName="clusterId" 
+          class="form-select"
+          [class.form-input--error]="lxcForm.get('clusterId')?.touched && lxcForm.get('clusterId')?.invalid"
+        >
+          <option value="" disabled selected>Select a cluster</option>
+          @for (cluster of clusters(); track cluster.id) {
+            <option [value]="cluster.id">{{ cluster.name || 'Cluster ' + cluster.id }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="templateId">OS Template</label>
+        <select 
+          id="templateId" 
+          formControlName="templateId" 
+          class="form-select"
+          [class.form-input--error]="lxcForm.get('templateId')?.touched && lxcForm.get('templateId')?.invalid"
+        >
+          <option value="" disabled selected>Select an operating system</option>
+          @for (template of templates(); track template.id) {
+            <option [value]="template.id">{{ template.name }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Root Password</label>
+        <input 
+          id="password" 
+          type="password" 
+          formControlName="password" 
+          class="form-input" 
+          placeholder="••••••••••••"
+          [class.form-input--error]="lxcForm.get('password')?.touched && lxcForm.get('password')?.invalid"
+        />
+        @if (lxcForm.get('password')?.touched && lxcForm.get('password')?.errors?.['minlength']) {
+          <small class="error-text">Password must be at least 8 characters long.</small>
+        }
+      </div>
+    </div>
+
+    <hr class="form-divider" />
+
+    <h3 class="section-title">Resources Allocation</h3>
+    
+    <div class="form-grid form-grid--4cols">
+      <div class="form-group">
+        <label class="form-label" for="cores">CPU Cores</label>
+        <input id="cores" type="number" formControlName="cores" class="form-input" min="1"/>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="memory">RAM (MB)</label>
+        <input id="memory" type="number" formControlName="memory" class="form-input" min="512"/>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="swap">Swap (MB)</label>
+        <input id="swap" type="number" formControlName="swap" class="form-input" min="256"/>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="disk">Disk (GB)</label>
+        <input id="disk" type="number" formControlName="disk" class="form-input" min="10"/>
+      </div>
+    </div>
+
+    <div class="form-group form-group--checkbox">
+      <label class="checkbox-container">
+        <input type="checkbox" formControlName="nesting" class="vm-checkbox" />
+        <span class="checkbox-label">
+          <strong>Enable Nesting</strong> (Allows running containers inside this LXC)
+        </span>
+      </label>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn btn--secondary" (click)="lxcForm.reset()" [disabled]="loading()">
+        Reset
+      </button>
+      <button type="submit" class="btn btn--primary" [disabled]="loading()">
+        @if (loading()) {
+          <span class="spinner"></span> Deploying...
+        } @else {
+          Create Container
+        }
+      </button>
+    </div>
+
+  </form>
+</div>

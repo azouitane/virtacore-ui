@@ -1,0 +1,217 @@
+@use "sass:color";
+
+// ==========================================
+// THÈME GLOBAL INTERFACE
+// ==========================================
+$bg-main: #0b111e;
+$bg-panel: #0f192a;
+$border-color: #1e293b;
+$text-main: #f8fafc;
+$text-muted: #64748b;
+$text-dim: #94a3b8;
+$color-cyan: #14b8a6;
+$color-cyan-hover: #0d9488;
+$bg-input: #090f1d;
+
+$font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+// ==========================================
+// CONTENEUR GLOBAL (CENTRÉ DIRECTEMENT)
+// ==========================================
+.vm-container {
+  min-height: 100vh;
+  background-color: $bg-main;
+  color: $text-main;
+  padding: 2rem;
+  font-family: $font-sans;
+  box-sizing: border-box;
+
+  // --- LES LIGNES À AJOUTER POUR CENTRER ---
+  display: flex;
+  flex-direction: column;
+  justify-content: center; // Centre verticalement
+  align-items: center;     // Centre horizontalement
+}
+
+// Optionnel : Ajoute une marge sous l'en-tête pour qu'il ne colle pas au formulaire
+.vm-header {
+  text-align: center; // Aligne aussi le titre au milieu si tu le souhaites
+  margin-bottom: 2rem;
+  width: 100%;
+  max-width: 720px;   // Aligné sur la largeur du formulaire
+}
+
+.form-wrapper {
+  width: 100%;        // Force le wrapper à occuper l'espace jusqu'au max-width
+  max-width: 720px;
+  background-color: $bg-panel;
+  border: 1px solid $border-color;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.cyber-form {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+// ==========================================
+// SECTIONS & INPUT GROUPS
+// ==========================================
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  
+  &__title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: $color-cyan;
+    margin: 0 0 0.25rem 0;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1;
+}
+
+.form-row {
+  display: flex;
+  gap: 1.5rem;
+  
+  &--three {
+    .form-group { min-width: 100px; }
+  }
+}
+
+// ==========================================
+// INPUT ELEMENTS DESIGN
+// ==========================================
+.form-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: $text-dim;
+}
+
+.form-input, .form-select {
+  width: 100%;
+  background-color: $bg-input;
+  border: 1px solid $border-color;
+  border-radius: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  color: $text-main;
+  font-size: 0.9rem;
+  outline: none;
+  font-family: inherit;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+
+  &::placeholder {
+    color: rgba($text-muted, 0.6);
+  }
+
+  &:focus {
+    border-color: color.adjust($border-color, $lightness: 15%);
+  }
+}
+
+.form-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2364748b'><path d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: calc(100% - 12px) center;
+  padding-right: 2rem;
+  cursor: pointer;
+}
+
+// ==========================================
+// SUBMIT ACTIONS & SPINNER
+// ==========================================
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+  border-top: 1px solid $border-color;
+  padding-top: 1.5rem;
+}
+
+.btn-submit {
+  background-color: $color-cyan;
+  color: #000000;
+  font-weight: 700;
+  font-size: 0.875rem;
+  padding: 0.65rem 1.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 0.2s ease;
+
+  &:hover:not(:disabled) { background-color: $color-cyan-hover; }
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+}
+
+.btn-cancel {
+  background-color: transparent;
+  border: 1px solid $border-color;
+  color: $text-dim;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.65rem 1.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    color: $text-main;
+    background-color: rgba(255, 255, 255, 0.02);
+    border-color: $text-muted;
+  }
+}
+
+.spinner-small {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top-color: #000000;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.alert-success {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: rgba(16, 185, 129, 0.1);
+  border: 1px solid #10b981;
+  color: #10b981;
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  font-weight: 500;
+  animation: fadeIn 0.3s ease-in-out;
+
+  .alert-icon {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

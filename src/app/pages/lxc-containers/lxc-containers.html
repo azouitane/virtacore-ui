@@ -1,0 +1,79 @@
+<div class="vm-container">
+
+  <header class="vm-header">
+    <div class="vm-header__left">
+      <h1 class="vm-header__title">Lxc Containers</h1>
+      <span class="vm-header__subtitle">{{ LxcContainers().length }} Lxc Containers</span>
+    </div>
+    <a routerLink="/layout/createLxc" class="vm-header__btn-create">
+      <span class="btn-icon">+</span> Add Lxc
+    </a>
+  </header>
+
+  <div class="vm-toolbar">
+    <div class="vm-filters">
+      <span class="vm-filters__counter">{{ LxcContainers().length }}</span>
+      <div class="vm-filters__options">
+        ALL
+      </div>
+    </div>
+  </div>
+
+  <div class="vm-table-wrapper">
+    <table class="vm-table">
+      <thead>
+        <tr>
+          <th class="vm-table__th vm-table__th--actions">ACTIONS</th>
+          <th class="vm-table__th vm-table__th--left">NAME</th>
+          <th class="vm-table__th">ID ▲</th>
+          <th class="vm-table__th">STATUS</th>
+          <th class="vm-table__th">HOST</th>
+          <th class="vm-table__th">IP</th>
+          <th class="vm-table__th">OS</th>
+          <th class="vm-table__th">CPU</th>
+          <th class="vm-table__th">RAM</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (lxc of LxcContainers(); track lxc.id) {
+        <tr class="vm-table__tr">
+          <td class="vm-table__td">
+            <a class="vm-details-link" [routerLink]="['/layout/lxc-containers', lxc.id]">
+              View Details
+            </a>
+          </td>
+
+          <td class="vm-table__td vm-table__td--left">
+            <div class="vm-table__name-wrapper">
+              <span class="vm-icon-server">🖳</span>
+              <span class="vm-table__name-text">{{ lxc.hostname }}</span>
+            </div>
+          </td>
+
+          <td class="vm-table__td vm-table__td--id">{{ lxc.lxcId }}</td>
+
+          <td class="vm-table__td">
+            <span class="status-badge" 
+              [class.status-badge--running]="lxc.status === 'RUNNING'"
+              [class.status-badge--stopped]="lxc.status === 'STOPPED'">
+              {{ lxc.status === 'RUNNING' ? '● Running' : '● Stopped' }}
+            </span>
+          </td>
+          <td class="vm-table__td">{{ lxc.host }}</td>
+          <td class="vm-table__td">{{ lxc.ip }}</td>
+          <td class="vm-table__td">{{ lxc.osVersion }}</td>
+          <td class="vm-table__td">{{ lxc.cpuPercent }} %</td>
+          <td class="vm-table__td">{{ lxc.memoryPercent }} %</td>
+        </tr>
+        } @empty {
+        <tr>
+          <td colspan="9" class="vm-table__td vm-table__td--empty">
+            Aucune machine virtuelle trouvée.
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+</div>

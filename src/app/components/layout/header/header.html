@@ -1,0 +1,55 @@
+<header class="header">
+
+  <div class="header__logo">
+    Virtacore
+  </div>
+
+
+  <nav class="header__nav">
+
+    @if (currentUser?.role === 'ADMIN') {
+
+      <a 
+        routerLink="/layout/clusters"
+        class="header__link"
+        routerLinkActive="header__link--active">
+        Clusters
+      </a>
+
+    }
+
+
+    <a 
+      routerLink="/layout/vms"
+      class="header__link"
+      routerLinkActive="header__link--active">
+      VMs
+    </a>
+
+
+    <a 
+      routerLink="/layout/lxc-containers"
+      class="header__link"
+      routerLinkActive="header__link--active">
+      LXC
+    </a>
+
+
+    <a 
+      routerLink="/layout/profile"
+      class="header__link"
+      routerLinkActive="header__link--active">
+      Profile
+    </a>
+
+
+    <button 
+      (click)="logout()" 
+      class="header__logout-btn">
+      Logout
+    </button>
+
+
+  </nav>
+
+</header>

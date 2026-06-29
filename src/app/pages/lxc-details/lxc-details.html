@@ -1,0 +1,134 @@
+<div class="details-container">
+  
+  <header class="details-header">
+    <div class="details-header__left">
+      <a routerLink="/layout/lxc-containers" class="btn-back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-back__icon">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+        Back to Instances
+      </a>
+      @if (lxc()) {
+        <h1 class="details-header__title">{{ lxc()?.hostname }}</h1>
+        <span class="details-header__subtitle">ID: <span class="mono">{{ lxc()?.id }}</span> • Node: <b>{{ lxc()?.node }}</b></span>
+      }
+    </div>
+
+    @if (lxc()) {
+      <div class="details-header__actions">
+        <div class="status-indicator" [class.status-indicator--running]="lxc()?.status?.toLowerCase() === 'running'">
+          <span class="status-dot"></span>
+          {{ lxc()?.status || 'unknown' }}
+        </div>
+
+        <div class="control-gate">
+          <button class="btn-ctrl btn-ctrl--start" [disabled]="lxc()?.status?.toLowerCase() === 'running'" (click)="onStartVm()">
+            <svg viewBox="0 0 24 24" fill="currentColor" class="ctrl-icon"><path d="M8 5v14l11-7z"/></svg>
+            Start
+          </button>
+          
+          <button class="btn-ctrl btn-ctrl--shutdown" [disabled]="lxc()?.status?.toLowerCase() !== 'running'" (click)="onShutdownVm()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="ctrl-icon"><path d="M18.36 6.64a9 9 0 1 1-12.73 0M12 2v10" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Shutdown
+          </button>
+
+          <button class="btn-ctrl btn-ctrl--stop" [disabled]="lxc()?.status?.toLowerCase() !== 'running'" (click)="onStopVm()">
+            <svg viewBox="0 0 24 24" fill="currentColor" class="ctrl-icon"><path d="M6 6h12v12H6z"/></svg>
+            Stop
+          </button>
+
+          <button class="btn-ctrl btn-ctrl--delete" (click)="onDeleteVm()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="ctrl-icon">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>
+            Delete
+          </button>
+        </div>
+      </div>
+    }
+  </header>
+
+    <div class="details-grid">
+      
+      <main class="metrics-panel">
+        <h2 class="panel-title">Live Telemetry (WebSocket)</h2>
+        
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-card__header">
+              <span class="metric-label">CPU Usage</span>
+              <span class="metric-value">{{ lxcMonitor()?.cpuPercent || 0 }}%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-bar__fill progress-bar__fill--cpu" [style.width.%]="lxcMonitor()?.cpuPercent || 0"></div>
+            </div>
+            <span class="metric-sub">Allocated: {{ lxc()?.cpu }} vCPUs</span>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-card__header">
+              <span class="metric-label">Memory Usage</span>
+              <span class="metric-value">{{ lxcMonitor()?.memoryPercent || 0 }}%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-bar__fill progress-bar__fill--ram" [style.width.%]="lxcMonitor()?.memoryPercent || 0"></div>
+            </div>
+            <span class="metric-sub">Used: {{ lxcMonitor()?.memoryGB || 0 }} GB / Total: {{ lxc()?.memory }} MB</span>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-card__header">
+              <span class="metric-label">Disk Read</span>
+              <span class="metric-value">{{ lxcMonitor()?.diskReadMB || 0 }} MB</span>
+            </div>
+            <span class="metric-sub">Disk Write: {{ lxcMonitor()?.diskWriteMB || 0 }} MB</span>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-card__header">
+              <span class="metric-label">Network Activity</span>
+              <div class="net-badges" style="margin-top: 0.5rem; display: flex; gap: 0.5rem;">
+                <span class="net-badge net-badge--in">⬇ {{ lxcMonitor()?.networkInMB || 0 }} MB</span>
+                <span class="net-badge net-badge--out">⬆ {{ lxcMonitor()?.networkOutMB || 0 }} MB</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <aside class="specs-panel">
+        <h2 class="panel-title">System Specifications</h2>
+        
+        <div class="specs-list">
+          <div class="spec-row">
+            <span class="spec-row__key">Proxmox VM ID</span>
+            <span class="spec-row__val mono">{{ lxc()?.lxcId }}</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-row__key">Target Cluster</span>
+            <span class="spec-row__val">{{ lxc()?.clusterName }}</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-row__key">Operating System</span>
+            <span class="spec-row__val">{{ lxc()?.os }} (v{{ lxc()?.version }})</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-row__key">Total Storage</span>
+            <span class="spec-row__val">{{ lxc()?.disk }} GB</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-row__key">Live Uptime</span>
+            <span class="spec-row__val mono">{{ lxcMonitor()?.uptimeMinutes || 0 }} Min</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-row__key">Created At</span>
+            <span class="spec-row__val" style="font-size: 0.8rem;">{{ lxc()?.createdAt | date:'medium' }}</span>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+
+
+</div>

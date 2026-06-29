@@ -1,0 +1,79 @@
+<div class="vm-container">
+
+  <header class="vm-header">
+    <div class="vm-header__left">
+      <h1 class="vm-header__title">Virtual Machines</h1>
+      <span class="vm-header__subtitle">{{ vms().length }} virtual machines</span>
+    </div>
+    <a routerLink="/layout/createVm" class="vm-header__btn-create">
+      <span class="btn-icon">+</span> Add VM
+    </a>
+  </header>
+
+  <div class="vm-toolbar">
+    <div class="vm-filters">
+      <span class="vm-filters__counter">{{ vms().length }}</span>
+      <div class="vm-filters__options">
+        ALL
+      </div>
+    </div>
+  </div>
+
+  <div class="vm-table-wrapper">
+    <table class="vm-table">
+      <thead>
+        <tr>
+          <th class="vm-table__th vm-table__th--checkbox">
+            <input type="checkbox" class="vm-checkbox">
+          </th>
+          <th class="vm-table__th">NAME</th>
+          <th class="vm-table__th">ID ▲</th>
+          <th class="vm-table__th">STATUS</th>
+          <th class="vm-table__th">HOST</th>
+          <th class="vm-table__th">IP</th>
+          <th class="vm-table__th">OS</th>
+          <th class="vm-table__th">CPU</th>
+          <th class="vm-table__th">RAM</th>
+          <th class="vm-table__th vm-table__th--actions"></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (vm of vms(); track vm.id) {
+        <tr class="vm-table__tr">
+          <td class="vm-table__td" [routerLink]="['/layout/vms', vm.id]">
+            <a class="vm-details-link" [routerLink]="['/layout/vms', vm.id]">
+                View Details
+            </a>
+          </td>
+
+          <td class="vm-table__td vm-table__td--name">
+            <span class="vm-icon-server">🖳</span>
+            {{ vm.name }}
+          </td>
+
+          <td class="vm-table__td vm-table__td--id">{{ vm.vmid }}</td>
+
+          <td class="vm-table__td">
+            <span class="status-badge" [class.status-badge--running]="vm.status === 'RUNNING'"
+              [class.status-badge--stopped]="vm.status === 'STOPPED'">
+              {{ vm.status === 'RUNNING' ? '● Running' : '● Stopped' }}
+            </span>
+          </td>
+          <td class="vm-table__td">{{ vm.host }}</td>
+          <td class="vm-table__td">{{ vm.ip }}</td>
+          <td class="vm-table__td">{{ vm.osVersion }}</td>
+          <td class="vm-table__td">{{ vm.cpuPercent }} %</td>
+          <td class="vm-table__td">{{ vm.memoryPercent }} %</td>
+        </tr>
+        } @empty {
+        <tr>
+          <td colspan="7" class="vm-table__td vm-table__td--empty">
+            Aucune machine virtuelle trouvée.
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+</div>

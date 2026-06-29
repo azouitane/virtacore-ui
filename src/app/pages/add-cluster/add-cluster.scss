@@ -1,0 +1,184 @@
+// Variables synchronisées (Thème Cyber / Dark Tech)
+$bg-main: #0b111e;
+$bg-panel: #0f192a;
+$border-color: #1e293b;
+$text-main: #f8fafc;
+$text-muted: #64748b;
+$text-dim: #94a3b8;
+$color-cyan: #14b8a6;
+$color-cyan-hover: #0d9488;
+$bg-input: #090f1d;
+$font-sans: 'Inter', system-ui, sans-serif;
+
+// Conteneur Principal (Centrage global de la page)
+.form-container {
+  min-height: 90vh;
+  background-color: $bg-main;
+  color: $text-main;
+  font-family: $font-sans;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; // Centre verticalement
+  align-items: center;     // Centre horizontalement
+  padding: 0.5rem 1rem;
+}
+
+// En-tête (Titre et sous-titre)
+.form-header {
+  margin-bottom: 1.5rem;
+  text-align: center;
+
+  &__title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: -0.02em;
+    color: $text-main;
+  }
+
+  &__subtitle {
+    color: $text-muted;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+  }
+}
+
+// Panneau du Formulaire
+.cyber-form {
+  background-color: $bg-panel;
+  border: 1px solid $border-color;
+  border-radius: 0.75rem;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 750px; // Largeur idéale pour le côte-à-côte
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
+}
+
+// Grille de disposition (2 colonnes)
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+
+  // Repasse sur une seule colonne sur les petits écrans (mobiles)
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+    
+    // Annule le span 2 du Token Secret sur mobile pour garder l'alignement vertical
+    .form-group[style*="grid-column: span 2;"] {
+      grid-column: span 1 !important;
+    }
+  }
+}
+
+// Groupe de champ (Label + Input + Erreur)
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+// Label stylisé en petits caractères espacés
+.form-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: $text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+// Style des Inputs
+.form-input {
+  background-color: $bg-input;
+  border: 1px solid $border-color;
+  color: $text-main;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
+
+  &::placeholder {
+    color: #334155;
+  }
+
+  // Effet de focus Cyber-Cyan
+  &:focus {
+    outline: none;
+    border-color: $color-cyan;
+    box-shadow: 0 0 8px rgba($color-cyan, 0.15);
+  }
+
+  // État d'erreur dynamique (géré par Angular)
+  &--error {
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 8px rgba(#ef4444, 0.2) !important;
+  }
+}
+
+// Texte d'erreur sous l'input
+.error-text {
+  color: #ef4444;
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin-top: 0.125rem;
+}
+
+// Zone des boutons d'actions
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid $border-color;
+}
+
+// Base des Boutons
+.btn {
+  font-weight: 700;
+  font-size: 0.875rem;
+  padding: 0.75rem 1.75rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  // Bouton de validation (Créer)
+  &--primary {
+    background-color: $color-cyan;
+    color: #000000;
+    
+    &:hover:not(:disabled) { 
+      background-color: $color-cyan-hover;
+      transform: translateY(-1px);
+    }
+    &:active:not(:disabled) {
+      transform: translateY(0);
+    }
+  }
+
+  // Bouton secondaire (Annuler)
+  &--secondary {
+    background-color: transparent;
+    border: 1px solid $border-color;
+    color: $text-dim;
+    text-decoration: none; // Pour la balise <a>
+    
+    &:hover:not(:disabled) {
+      background-color: rgba(255, 255, 255, 0.05);
+      color: $text-main;
+    }
+  }
+}

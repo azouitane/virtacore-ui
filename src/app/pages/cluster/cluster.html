@@ -1,0 +1,93 @@
+<div class="vm-container">
+  
+  <header class="vm-header">
+    <div class="vm-header__left">
+      <h1 class="vm-header__title">Infrastructure Clusters</h1>
+      <span class="vm-header__subtitle">{{ clusters().length }} managed clusters</span>
+    </div>
+    <button routerLink="/layout/add_cluster" class="vm-header__btn-create">
+      <span class="btn-icon">+</span> Add Cluster
+    </button>
+  </header>
+
+  <div class="vm-toolbar">
+    <div class="vm-filters">
+      <span class="vm-filters__counter">{{ clusters().length }}</span>
+      <div class="vm-filters__options">
+        ALL
+      </div>
+    </div>
+  </div>
+
+  <div class="vm-table-wrapper">
+    <table class="vm-table">
+      <thead>
+        <tr>
+          <th class="vm-table__th vm-table__th--checkbox">
+            <input type="checkbox" class="vm-checkbox">
+          </th>
+          <th class="vm-table__th">CLUSTER NAME</th>
+          <th class="vm-table__th">ID ▲</th>
+          <th class="vm-table__th">STATUS</th>
+          <th class="vm-table__th">HOST NODE</th>
+          <th class="vm-table__th">API PORT</th>
+          <th class="vm-table__th vm-table__th--actions"></th>
+        </tr>
+      </thead>
+      <tbody>
+        @if (isLoading()) {
+          <tr>
+            <td colspan="7" class="vm-table__td vm-table__td--empty">
+              <div class="spinner"></div>
+              Chargement des clusters...
+            </td>
+          </tr>
+        } @else if (errorMessage()) {
+          <tr>
+            <td colspan="7" class="vm-table__td vm-table__td--error">
+              ⚠ {{ errorMessage() }}
+            </td>
+          </tr>
+        } @else {
+          @for (cluster of clusters(); track cluster.id) {
+            <tr class="vm-table__tr" [class.vm-table__tr--inactive]="!cluster.active">
+              <td class="vm-table__td">
+                <input type="checkbox" class="vm-checkbox">
+              </td>
+              
+              <td class="vm-table__td vm-table__td--name">
+                <span class="vm-icon-cluster">🌐</span>
+                {{ cluster.name }}
+              </td>
+              
+              <td class="vm-table__td vm-table__td--id">{{ cluster.id.substring(0, 8) }}</td>
+              
+              <td class="vm-table__td">
+                <span class="status-badge" 
+                  [class.status-badge--running]="cluster.active"
+                  [class.status-badge--stopped]="!cluster.active">
+                  {{ cluster.active ? '● Online' : '● Offline' }}
+                </span>
+              </td>
+              
+              <td class="vm-table__td vm-table__td--host">{{ cluster.host }}</td>
+              
+              <td class="vm-table__td vm-table__td--port">{{ cluster.apiPort }}</td>
+              
+              <td class="vm-table__td vm-table__td--actions">
+                <button class="btn-menu-trigger">⋮</button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="7" class="vm-table__td vm-table__td--empty">
+                Aucun cluster configuré.
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+
+</div>

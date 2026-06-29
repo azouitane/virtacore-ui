@@ -1,0 +1,96 @@
+<div class="form-container">
+  
+  <div class="form-header">
+    <h2 class="form-header__title">Ajouter un nouveau cluster</h2>
+    <p class="form-header__subtitle">Configurez les accès de votre infrastructure</p>
+  </div>
+
+  <form [formGroup]="clusterForm" (ngSubmit)="addCluster()" class="cyber-form">
+    
+    <div class="form-grid">
+      
+      <div class="form-group">
+        <label for="name" class="form-label">Nom du cluster</label>
+        <input 
+          id="name" 
+          type="text" 
+          formControlName="name" 
+          placeholder="Ex: Cluster-Production" 
+          class="form-input"
+          [class.form-input--error]="clusterForm.controls.name.touched && clusterForm.controls.name.invalid"
+        />
+        @if (clusterForm.controls.name.touched && clusterForm.controls.name.errors?.['required']) {
+          <small class="error-text">Le nom est obligatoire.</small>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="host" class="form-label">Hôte (IP ou Domaine)</label>
+        <input 
+          id="host" 
+          type="text" 
+          formControlName="host" 
+          placeholder="Ex: 192.168.1.100" 
+          class="form-input"
+          [class.form-input--error]="clusterForm.controls.host.touched && clusterForm.controls.host.invalid"
+        />
+        @if (clusterForm.controls.host.touched && clusterForm.controls.host.errors?.['required']) {
+          <small class="error-text">L'hôte est obligatoire.</small>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="apiPort" class="form-label">Port API</label>
+        <input 
+          id="apiPort" 
+          type="number" 
+          formControlName="apiPort" 
+          class="form-input"
+          [class.form-input--error]="clusterForm.controls.apiPort.touched && clusterForm.controls.apiPort.invalid"
+        />
+        @if (clusterForm.controls.apiPort.touched && clusterForm.controls.apiPort.errors?.['required']) {
+          <small class="error-text">Le port est obligatoire.</small>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="tokenId" class="form-label">ID du Token (Token ID)</label>
+        <input 
+          id="tokenId" 
+          type="text" 
+          formControlName="tokenId" 
+          placeholder="Ex: root@pve!token" 
+          class="form-input"
+          [class.form-input--error]="clusterForm.controls.tokenId.touched && clusterForm.controls.tokenId.invalid"
+        />
+        @if (clusterForm.controls.tokenId.touched && clusterForm.controls.tokenId.errors?.['required']) {
+          <small class="error-text">Le Token ID est obligatoire.</small>
+        }
+      </div>
+
+      <div class="form-group" style="grid-column: span 2;">
+        <label for="tokenSecret" class="form-label">Secret du Token</label>
+        <input 
+          id="tokenSecret" 
+          type="password" 
+          formControlName="tokenSecret" 
+          placeholder="••••••••••••••••••••" 
+          class="form-input"
+          [class.form-input--error]="clusterForm.controls.tokenSecret.touched && clusterForm.controls.tokenSecret.invalid"
+        />
+        @if (clusterForm.controls.tokenSecret.touched && clusterForm.controls.tokenSecret.errors?.['required']) {
+          <small class="error-text">Le secret est obligatoire.</small>
+        }
+      </div>
+
+    </div>
+
+    <div class="form-actions">
+      <a routerLink="/layout/clusters" class="btn btn--secondary">Annuler</a>
+      <button type="submit" [disabled]="clusterForm.invalid" class="btn btn--primary">
+        Créer le cluster
+      </button>
+    </div>
+
+  </form>
+</div>

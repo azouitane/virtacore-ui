@@ -1,0 +1,118 @@
+<div class="vm-container">
+  
+  <header class="vm-header">
+    <div class="vm-header__left">
+      <h1 class="vm-header__title">Deploy New Instance</h1>
+      <span class="vm-header__subtitle">Provision a new virtual machine on your Proxmox clusters</span>
+    </div>
+  </header>
+
+  @if (successMessage()) {
+    <div class="alert-success">
+      <svg class="alert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+      </svg>
+      <span>{{ successMessage() }}</span>
+    </div>
+  }
+
+  <div class="form-wrapper">
+    <form [formGroup]="vmForm" (ngSubmit)="AddVm()" class="cyber-form">
+      
+      <section class="form-section">
+        <h3 class="form-section__title">General Configuration</h3>
+        
+        <div class="form-group">
+          <label class="form-label" for="name">Machine Name</label>
+          <input class="form-input" id="name" type="text" formControlName="name" placeholder="e.g. ubuntu-server-01">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="clusterId">Target Cluster</label>
+            <select class="form-select" id="clusterId" formControlName="clusterId">
+              <option value="" disabled selected>Select a cluster node</option>
+              @for (cluster of clusters(); track cluster.id) {
+                <option [value]="cluster.id">{{ cluster.name }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="proxmoxTemplateId">OS Template</label>
+            <select class="form-select" id="proxmoxTemplateId" formControlName="proxmoxTemplateId">
+              <option [value]="0" disabled selected>Select base template</option>
+              @for (tmpl of templates(); track tmpl.proxmoxTemplateId) {
+                <option [value]="tmpl.proxmoxTemplateId">{{ tmpl.name }}</option>
+              }
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <section class="form-section">
+        <h3 class="form-section__title">Hardware Allocation</h3>
+        
+        <div class="form-row form-row--three">
+          <div class="form-group">
+            <label class="form-label" for="cpu">vCPUs</label>
+            <input class="form-input" id="cpu" type="number" formControlName="cpu" min="1">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="memory">Memory (MB)</label>
+            <input class="form-input" id="memory" type="number" formControlName="memory" min="512" step="512">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="disk">Disk Storage (GB)</label>
+            <input class="form-input" id="disk" type="number" formControlName="disk" min="10">
+          </div>
+        </div>
+      </section>
+
+      <section class="form-section">
+        <h3 class="form-section__title">Default Admin Account</h3>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="username">Root Username</label>
+            <input 
+              class="form-input" 
+              id="username" 
+              type="text" 
+              formControlName="username" 
+              placeholder="e.g. cloudadmin"
+              autocomplete="off"
+            >
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="password">Password</label>
+            <input 
+              class="form-input" 
+              id="password" 
+              type="password" 
+              formControlName="password" 
+              placeholder="••••••••"
+              autocomplete="new-password"
+            >
+          </div>
+        </div>
+      </section>
+
+      <footer class="form-actions">
+        <button type="button" class="btn-cancel" routerLink="/layout/Vms">Cancel</button>
+        <button type="submit" class="btn-submit" [disabled]="vmForm.invalid || loading()">
+          @if (loading()) {
+            <div class="spinner-small"></div> Deploying...
+          } @else {
+            Create Virtual Machine
+          }
+        </button>
+      </footer>
+
+    </form>
+  </div>
+
+</div>

@@ -1,0 +1,105 @@
+<div class="login-container">
+  
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-card">
+
+    <header class="login-card__header">
+      <h1 class="login-card__title">Sign In</h1>
+      <p class="login-card__subtitle">Access your Virtacore area</p>
+    </header>
+
+    <div class="login-card__form-group">
+      
+      <div class="form-control">
+        <label for="email" class="form-control__label">Email Address</label>
+        
+        <div class="form-control__input-wrapper"
+          [class.form-control__input-wrapper--invalid]="loginForm.controls.email.invalid && loginForm.controls.email.touched"
+          [class.form-control__input-wrapper--valid]="!(loginForm.controls.email.invalid && loginForm.controls.email.touched)">
+          
+          <svg class="form-control__icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+          </svg>
+          
+          <input id="email" type="email" formControlName="email" placeholder="exemple@entreprise.com" class="form-control__input">
+        </div>
+
+        @if (loginForm.controls.email.invalid && loginForm.controls.email.touched) {
+          <div class="form-control__error-container">
+            <span class="form-control__error-text">
+              Please enter a valid email address.
+            </span>
+          </div>
+        }
+      </div>
+
+      <div class="form-control">
+        <label for="password" class="form-control__label">Password</label>
+        
+        <div class="form-control__input-wrapper"
+          [class.form-control__input-wrapper--invalid]="loginForm.controls.password.invalid && loginForm.controls.password.touched"
+          [class.form-control__input-wrapper--valid]="!(loginForm.controls.password.invalid && loginForm.controls.password.touched)">
+          
+          <svg class="form-control__icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          </svg>
+
+          <input id="password" [type]="isPasswordVisible() ? 'text' : 'password'" formControlName="password" placeholder="••••••••" class="form-control__input form-control__input--password">
+
+          <button type="button" (click)="isPasswordVisible.set(!isPasswordVisible())" class="form-control__toggle-visibility" [attr.aria-label]="isPasswordVisible() ? 'Hide password' : 'Show password'">
+            @if (isPasswordVisible()) {
+              <svg class="form-control__icon-toggle" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" />
+              </svg>
+            } @else {
+              <svg class="form-control__icon-toggle" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+            }
+          </button>
+        </div>
+
+        @if (loginForm.controls.password.invalid && loginForm.controls.password.touched) {
+          <div class="form-control__error-container">
+            <span class="form-control__error-text">
+              Password must be at least 6 characters.
+            </span>
+          </div>
+        }
+      </div>
+
+      <button type="submit" [disabled]="loginForm.invalid || loading()" class="login-card__submit-btn">
+        @if (loading()) {
+          <span class="login-card__loading-wrapper">
+            <svg class="login-card__spinner" fill="none" viewBox="0 0 24 24">
+              <circle class="login-card__spinner-bg" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="login-card__spinner-accent" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Loading...
+          </span>
+        } @else {
+          Sign In
+        }
+      </button>
+
+    </div>
+
+    @if (errorMessage()) {
+      <div class="login-card__error-banner">
+        <div class="login-card__error-icon-wrapper">
+          <svg class="login-card__error-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </div>
+        <p class="login-card__error-message">{{ errorMessage() }}</p>
+      </div>
+    }
+
+    <footer class="login-card__footer">
+      <p class="login-card__copyright">
+        © 2026 Virtacore — Version 1.0
+      </p>
+    </footer>
+
+  </form>
+</div>
